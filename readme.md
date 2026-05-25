@@ -93,7 +93,7 @@ pip install -r requirements.txt
 
 ```
 
-#### 3. 📦 Setting up FinBERT Weights Locally
+### 3. Setting up FinBERT Weights Locally
 
 Because GitHub restricts files over 100MB, the model weights (`pytorch_model.bin`) are git-ignored. You must fetch them manually before executing the pipeline:
 
@@ -121,7 +121,6 @@ ara_trader/
 ```
 
 
-
 ### 4. Pipeline Automation Execution
 
 The complete multi-stage execution pipeline is fully automated. To run data collection, data normalization, neural inference, unified ranking, and position sizing in sequence, execute the master orchestration shell script:
@@ -138,6 +137,7 @@ chmod +x run_predict.sh
 
 Once execution completes successfully, check your generated file: `final_trade_orders.csv`.
 
+
 ---
 
 ## 🔄 Model Maintenance & Retraining
@@ -153,9 +153,10 @@ python3 train_refined_model.py
 
 *Note: All newly generated model parameters will automatically be screened by the **Refinement Gate** guardrails ($\ge 55\%$ directional validation accuracy and $\le 12\%$ generalization gap) before replacing your active inference engine artifact.*
 
+
 ---
 
-## 🚀 Model Maintenance Pipeline
+### 🚀 Model Maintenance Pipeline
 
 You must execute the pipeline scripts in the exact chronological sequence defined below. Skipping steps or running them out of order will introduce lookahead bias or induce shape mismatches during inference.
 
@@ -165,7 +166,7 @@ You must execute the pipeline scripts in the exact chronological sequence define
 
 ```
 
-### 1. Ingestion Layer (`fetch_data.py`)
+#### 1. Ingestion Layer (`fetch_data.py`)
 
 * **Role:** Establishes connection to the IBKR API gateway to synchronize historical price bars while pulling raw news headlines via the Polygon API.
 
@@ -173,25 +174,23 @@ You must execute the pipeline scripts in the exact chronological sequence define
 * **Mechanics:** Resolves weekend kinetic vacuums by compounding weekend news volume into Monday trading boundaries and applies an implicit intraday cutoff to isolate text data from lookahead contamination.
 * **Command:**
 ```bash
+    python fetch_data.py
+
 
 ```
 
 
-
-python fetch_data.py
-
-```
-
-### 2. Binary Compilation (`data_to_qlib.py`)
+#### 2. Binary Compilation (`data_to_qlib.py`)
 *   **Role:** Performs a complete infrastructure reset of the local acceleration layer and extracts multi-modal sequences out of the SQLite ledger.
 *   **Mechanics:** Compiles and flattens price features along with raw text features (`open`, `high`, `low`, `close`, `volume`, `avg_sentiment`, `news_volume`) into optimized 32-bit floating-point binary blocks (`.bin`) mapped to an explicit Unix timestamp index.
 *   **Command:**
-    ```bash
+```bash
     python data_to_qlib.py
 
 ```
 
-### 3. Model Training & Refinement Gate (`train_refined_model.py`)
+
+#### 3. Model Training & Refinement Gate (`train_refined_model.py`)
 
 * **Role:** Initializes Qlib's data provider to ingest the binary matrix and dynamically evaluates structural expressions mapped out in `qlib_factor_config.yaml`.
 
@@ -208,11 +207,7 @@ python train_refined_model.py
 
 
 
-```
-
----
-
-## 📊 Downstream Production Handoff
+### 📊 Downstream Production Handoff
 
 Once the refinement training sequence completes, execution moves seamlessly to production inference and capital allocation:
 
@@ -220,9 +215,11 @@ Once the refinement training sequence completes, execution moves seamlessly to p
 2.  **`rank_and_filter.py`**: Compiles model inference outputs into a joint cross-sectional ranking schema, balancing alpha predictions against physical support-floor characteristics to establish an exponential capital decay multiplier.
 3.  **`final_plan.py`**: Governs final trade orders by evaluating support/resistance levels to scale exact order sizing, outputting a risk-managed execution sheet ready for the IBKR Bridge.
 
-```
+
 
 ---
+
+
 
 ## 🤝 Roadmap & Areas to Contribute
 
@@ -233,6 +230,7 @@ We are actively seeking contributors to expand the capacity of AraTradeSmart. If
 * [ ] **LLM Agent Routing:** Upgrading the local FinBERT structure to a specialized LLM routing agent that parses complex macroeconomic event transcripts.
 * [ ] **Advanced Execution Algos:** Enhancing the IBKR bridge with local TWAP/VWAP execution slice logics to hide large volume footprints.
 
+
 ---
 
 ## 🛠️ Contribution Guidelines
@@ -242,11 +240,13 @@ We are actively seeking contributors to expand the capacity of AraTradeSmart. If
 3. **Write Unit Tests:** Verify execution logic, factor math, and risk boundaries in a corresponding test file.
 4. **Submit a Pull Request:** Describe your improvements, provide validation metrics, and open the PR for review.
 
+
 ---
 
 ## 📜 License
 
 Distributed under the **GNU General Public License v3.0 (GPL-3.0)**. See `LICENSE` for more information.
+
 
 ---
 
