@@ -1,0 +1,58 @@
+# qlib_factor_config.yaml - Zero-Dependency Atomic Version
+data_handler_config:
+    start_time: 2010-01-01 
+    end_time: 2026-12-31
+    fit_start_time: 2010-01-01
+    fit_end_time: 2024-12-31
+    instruments: "watchlist"
+    feature_config:
+        fields:
+            # ROC12 Atomic: (Close / Ref(Close, 12)) - 1
+            - ["$close/Ref($close,12)-1", "ROC12"]
+            
+            # EMA_Diff Atomic (Using Mean as a proxy for EMA to ensure registration)
+            - ["($close-Mean($close,9))/$close", "EMA_Diff"]
+            
+            # Market Volatility: Standard Deviation of 1-day returns
+            - ["Std($close/Ref($close,1)-1, 20)", "Market_Vol"]
+            
+            # Bollinger Band Width Proxy
+            - ["(4*Std($close,20))/Mean($close,20)", "BB_Width"]
+            
+            # Distance from 200-day SMA
+            - ["($close-Mean($close,200))/$close", "Dist_SMA200"]
+            
+            # Distance from 20-day SMA (VWAP Proxy)
+            - ["($close-Mean($close,20))/$close", "EMA20_Dist"]
+            
+            # ATR Atomic: Mean of True Range
+            - ["Mean(Greater($high-$low, Greater(Abs($high-Ref($close,1)), Abs($low-Ref($close,1)))), 14)/$close", "ATR_Pct"]
+            
+            # Relative Volume
+            - ["$volume/Mean($volume,20)", "RVOL"]
+            
+            # Buying Power Proxy (Replaces MFI)
+            - ["Mean(($close-Ref($close,1))*$volume, 14)/Mean($volume, 14)", "Force_Index"]
+            
+            # Price Momentum 
+            - ["$close/Mean($close,5)-1", "Short_Momentum"]
+
+            # Phase 2 Sentiment Matrices: Accessing the calibrated fields directly
+            - ["$scaled_sentiment", "$scaled_sentiment"]
+            - ["$scaled_volume", "$scaled_volume"]
+        names:
+            - ROC12
+            - EMA_Diff
+            - Market_Vol
+            - BB_Width
+            - Dist_SMA200
+            - EMA20_Dist
+            - ATR_Pct
+            - RVOL
+            - Force_Index
+            - Short_Momentum
+    label_config:
+        fields:
+            - ["Ref($close,-5)/$close-1", "Target_Return"]
+        names:
+            - Target_Return

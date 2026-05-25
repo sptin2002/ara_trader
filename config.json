@@ -1,0 +1,73 @@
+{
+    "watchlist-failed": [ "BRK.B", "MMC", "SQ"],
+    "watchlist": [
+        "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AVGO", "LLY", "JPM", 
+        "UNH", "V", "MA", "XOM", "HD", "PG", "COST", "JNJ", "ABBV", "CRM", "NFLX", "AMD", "WMT", 
+        "CVX", "BAC", "PEP", "ADBE", "ORCL", "KO", "TMO", "ACN", "CSCO", "DIS", "LIN", "MCD", 
+        "ABT", "DHR", "INTU", "VZ", "CAT", "GE", "QCOM", "IBM", "AMAT", "TXN", "NOW", "PM", 
+        "AMGN", "UBER", "ISRG", "PFE", "LOW", "HON", "MS", "AXP", "UNP", "GS", "COP", "SPGI", 
+        "RTX", "LMT", "ELV", "SYK", "PLTR", "MU", "PANW", "BKNG", "TJX", "MDLZ", "C", "ADI", 
+        "LRCX", "GILD", "VRT", "ETN", "GEV", "BSX", "REGN", "CB", "KLAC", "SCHW", "DE", 
+        "ANET", "SNPS", "CDNS", "CRWD", "MAR", "CME", "MPC", "PGR", "PH", "MSTR", "MELI", "PYPL", 
+        "ABNB", "HOOD", "COIN", "SPY"
+    ],
+    "macro_symbols": [
+        "VIX"
+    ],
+    "underfit_watchlist": [
+    ],
+    "overfit_watchlist": [
+        "MU"
+    ],
+    "scanner": {
+        "scanCode": "HOT_BY_VOLUME",
+        "locationCode": "STK.US.MAJOR",
+        "priceAbove": 20.0,
+        "avgVolumeAbove": 2000000,
+        "max_results": 25
+    },
+    "settings": {
+        "account_equity": 30000,
+        "peak_equity": 30000,
+        "risk_per_trade": 0.01,
+        "period": "5 Y",
+        "atr_multiplier": 2.0,
+        "use_trailing_stop": true,
+        "db_name": "trading_vault.db",
+        "ibkr_port": 7497,
+        "ibkr_client_id": 1
+    },
+    "thresholds": {
+        "min_probability": 0.6
+    },
+    "model_settings": {
+        "retrain_interval_days": 7,
+        "lookback_window": 30,
+        "lookahead_days": 5,
+        "target_gain_pct": 0.03,
+        "training": {
+            "epochs": 30,
+            "batch_size": 32,
+            "lstm_units_l1": 32,
+            "lstm_units_l2": 16,
+            "dropout_rate": 0.3
+        },
+        "indicators": {
+            "rsi_period": 14,
+            "atr_period": 14,
+            "roc_period": 12,
+            "sma_long": 200
+        }
+    },
+    "risk_management": {
+        "max_portfolio_risk_pct": 0.02,
+        "sentiment_lookback": 3,
+        "trailing_stop_activation_pct": 0.0075,
+        "volatility_regime_threshold": 25.0
+    },
+    "model_validation": {
+        "min_train_accuracy": 0.55,
+        "max_delta_threshold": 0.12,
+        "validation_split": 0.2
+    }
+}
