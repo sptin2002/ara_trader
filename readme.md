@@ -57,6 +57,10 @@ ara_trader/
 ├── run_predict.sh           # Master Linux/macOS automation orchestrator
 ├── run_predict.ps1          # Master Windows PowerShell automation orchestrator
 ├── train_refined_model.py   # Scheduled multi-modal retraining utility
+├── finbert-local/           # LOCAL ONLY: Downloaded FinBERT weights (GIT IGNORED)
+│   ├── config.json          # FinBERT architecture configurations
+│   ├── pytorch_model.bin    # FinBERT core model tensor weights (~418MB)
+│   └── vocab.txt            # FinBERT tokenizer dictionary
 ├── config/                  # Future structural target for pipeline configurations
 ├── src/
 │   ├── data/                # Ingestion engines (fetch_data.py, data_to_qlib.py)
@@ -89,7 +93,36 @@ pip install -r requirements.txt
 
 ```
 
-### 3. Pipeline Automation Execution
+#### 3. 📦 Setting up FinBERT Weights Locally
+
+Because GitHub restricts files over 100MB, the model weights (`pytorch_model.bin`) are git-ignored. You must fetch them manually before executing the pipeline:
+
+1. Create the target directory inside the root of your workspace:
+```bash
+mkdir -p finbert-local
+
+```
+
+
+2. Download the required model files from Hugging Face (`ProsusAI/finbert`):
+* **Weights:** [pytorch_model.bin](https://www.google.com/search?q=https://huggingface.co/ProsusAI/finbert/resolve/main/pytorch_model.bin) (~418MB)
+* **Config:** [config.json](https://www.google.com/search?q=https://huggingface.co/ProsusAI/finbert/resolve/main/config.json)
+* **Vocabulary:** [vocab.txt](https://www.google.com/search?q=https://huggingface.co/ProsusAI/finbert/resolve/main/vocab.txt)
+
+
+3. Place all three downloaded files directly inside the `finbert-local/` folder. Your local structure must mirror this exactly:
+```text
+ara_trader/
+└── finbert-local/
+    ├── config.json
+    ├── pytorch_model.bin
+    └── vocab.txt
+
+```
+
+
+
+### 4. Pipeline Automation Execution
 
 The complete multi-stage execution pipeline is fully automated. To run data collection, data normalization, neural inference, unified ranking, and position sizing in sequence, execute the master orchestration shell script:
 
@@ -152,7 +185,7 @@ Distributed under the **GNU General Public License v3.0 (GPL-3.0)**. See `LICENS
 
 Have questions, suggestions, or want to discuss alpha models?
 
-* Open an **[Issue](https://www.google.com/search?q=https://github.com/sptin2002/ara_trader/issues)** for bugs or feature proposals.
-* Start a thread in **[Discussions](https://www.google.com/search?q=https://github.com/sptin2002/ara_trader/discussions)** to share quant insights.
+* Open an **[Issue](https://github.com/sptin2002/ara_trader/issues)** for bugs or feature proposals.
+* Start a thread in **[Discussions](https://github.com/sptin2002/ara_trader/discussions)** to share quant insights.
 
 *Disclaimer: This software is for educational and research purposes only. Algorithmic trading carries substantial financial risk. Use at your own discretion.*
