@@ -1,4 +1,5 @@
 .env
+.DS_Store
 init_data.py
 final_execution_list.csv
 final_trade_orders.csv
