@@ -155,6 +155,75 @@ python3 train_refined_model.py
 
 ---
 
+## 🚀 Model Maintenance Pipeline
+
+You must execute the pipeline scripts in the exact chronological sequence defined below. Skipping steps or running them out of order will introduce lookahead bias or induce shape mismatches during inference.
+
+```
+[fetch_data.py]  -->  [data_to_qlib.py]  -->  [train_refined_model.py]
+(Ingestion Layer)     (Binary Conversion)     (Model Engine Training)
+
+```
+
+### 1. Ingestion Layer (`fetch_data.py`)
+
+* **Role:** Establishes connection to the IBKR API gateway to synchronize historical price bars while pulling raw news headlines via the Polygon API.
+
+
+* **Mechanics:** Resolves weekend kinetic vacuums by compounding weekend news volume into Monday trading boundaries and applies an implicit intraday cutoff to isolate text data from lookahead contamination.
+* **Command:**
+```bash
+
+```
+
+
+
+python fetch_data.py
+
+```
+
+### 2. Binary Compilation (`data_to_qlib.py`)
+*   **Role:** Performs a complete infrastructure reset of the local acceleration layer and extracts multi-modal sequences out of the SQLite ledger.
+*   **Mechanics:** Compiles and flattens price features along with raw text features (`open`, `high`, `low`, `close`, `volume`, `avg_sentiment`, `news_volume`) into optimized 32-bit floating-point binary blocks (`.bin`) mapped to an explicit Unix timestamp index.
+*   **Command:**
+    ```bash
+    python data_to_qlib.py
+
+```
+
+### 3. Model Training & Refinement Gate (`train_refined_model.py`)
+
+* **Role:** Initializes Qlib's data provider to ingest the binary matrix and dynamically evaluates structural expressions mapped out in `qlib_factor_config.yaml`.
+
+
+* **Mechanics:** Constructs a Temporal Fusion Transformer (TFT) style architecture featuring custom multi-head attention blocks and cross-modal layers. The model conditions technical vectors against volume-weighted sentiment metrics.
+* **The Regularization Guardrail:** The script reads thresholds natively from `config.json`. If a symbol satisfies the validation constraints (`min_train_accuracy >= 0.55` and `validation_delta <= 0.12`), its compiled neural weights are exported to disk; otherwise, the artifact is rejected.
+
+
+* **Command:**
+```bash
+python train_refined_model.py
+
+```
+
+
+
+```
+
+---
+
+## 📊 Downstream Production Handoff
+
+Once the refinement training sequence completes, execution moves seamlessly to production inference and capital allocation:
+
+1.  **`predict_refined_signals.py`**: Loads the verified `.keras` model checkpoints, pulls real-time factor matrices while isolating pure feature inputs from risk markers, and calculates cross-modal prediction probabilities.
+2.  **`rank_and_filter.py`**: Compiles model inference outputs into a joint cross-sectional ranking schema, balancing alpha predictions against physical support-floor characteristics to establish an exponential capital decay multiplier.
+3.  **`final_plan.py`**: Governs final trade orders by evaluating support/resistance levels to scale exact order sizing, outputting a risk-managed execution sheet ready for the IBKR Bridge.
+
+```
+
+---
+
 ## 🤝 Roadmap & Areas to Contribute
 
 We are actively seeking contributors to expand the capacity of AraTradeSmart. If you specialize in any of the following fields, jump in!
